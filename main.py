@@ -31,9 +31,27 @@ def desenhaLabirinto(lab, larg, alt):
   for (a, b) in zip(horizontal, vertical):
     print(''.join(a + ['\n'] + b))
 
+'''
+Primeira função: parametros - uma posição e o labirinto sem muros
+return: quais são as posições filhas, quais caminhos posso seguir a partir daquela posição 
+
+Segunda função: parametros G da posição (acima) e as posições filhas
+a função irá calcular a f (soma da g e h) das filhas, isso me ajudará a decidir qual o caminho de menor custo. 
+A G das filhas é a G da posição + 1.
+
+
+A heuristica é sempre recalculada, pois pode melhorar, mas o custo não.
+'''
+
+
+
+
+
+
 #def aEstrela(lab, inicio, fim):
   #retornar nós visitados e suas f's 
   #retornar o proprio caminho, n sei como mas queria ir printando o percurso que ele faz, mas quero atualizar o mapa toda vez que ele faz isso
+# Já sei pq eu sou demais end='\r'
 
 #1º calcula a distancia ideal do ponto I ate o ponto F
   #(|x1 - x2| + |y1 - y2|) - essa é a distancia ideal
