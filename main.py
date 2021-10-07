@@ -40,7 +40,7 @@ a função irá calcular a f (soma da g e h) das filhas, isso me ajudará a deci
 A G das filhas é a G da posição + 1.
 
 
-A heuristica é sempre recalculada, pois pode melhorar, mas o custo não.
+A heuristica e o custo são sempre recalculados. A minha função tem que calcular o caminho ideal 
 '''
 
 
