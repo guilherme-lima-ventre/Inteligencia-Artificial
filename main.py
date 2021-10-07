@@ -1,4 +1,5 @@
 from random import shuffle, randrange
+import time 
 
 def criaLabirinto(larg, alt):
   lab = [[0] * larg + [1] for _ in range(alt)] + [[1] * (larg + 1)]
@@ -32,12 +33,14 @@ def desenhaLabirinto(lab, larg, alt):
 
 #def aEstrela(lab, inicio, fim):
   #retornar nós visitados e suas f's 
-  #retornar o proprio caminho
+  #retornar o proprio caminho, n sei como mas queria ir printando o percurso que ele faz, mas quero atualizar o mapa toda vez que ele faz isso
 
 #1º calcula a distancia ideal do ponto I ate o ponto F
-  #(|x1 - x2| + |y1 - y2|)
+  #(|x1 - x2| + |y1 - y2|) - essa é a distancia ideal
+  
 #2º escolher a proxima posição baseado no valor da distancia de cada possivel ponto
 desenhaLabirinto(criaLabirinto(9, 9), 9, 9)
 
+# print('\U0001F47E') -- para printar o ponto se movendo
 
 
