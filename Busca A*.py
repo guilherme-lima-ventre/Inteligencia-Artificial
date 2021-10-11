@@ -19,7 +19,7 @@ def cria_labirinto(larg, alt):
   quebra_muros(randrange(alt), randrange(larg))
   return semMuros
 
-def desenha_labirinto(lab, larg, alt):
+def desenha_labirinto(lab, alt, larg):
   vertical = [['|   '] * larg + ['|'] for _ in range(alt)] + [[]]
   horizontal = [['+---'] * larg + ['+'] for _ in range(alt + 1)]
 
@@ -45,77 +45,79 @@ def desenha_labirinto(lab, larg, alt):
 def a_estrela(matriz, ini, obj):
   inicio = (ini[0] * 2 + 1, ini[1] * 2 + 1)
   fim = (obj[0] * 2 + 1, obj[1] * 2 + 1)
-  caminho = [inicio], funcao = [], direcoes = []
+  caminho = list()
+  caminho.append(inicio)
+  funcao = list()
+  direcoes = list()
   g = 0
-  
-#a gente tem uma noção de quantas vezes vamos fazer por conta do calculo de heuristica inicial, ta faltando considerar isso. 
-#
+  retroceder = 0
+  print(inicio, fim)
 
   while caminho[-1] != fim:
-    filhos = nos_filhos(matriz, caminho[-1], fim)
-    funcao.append(list()), direcoes.append(list())
-    g += 2
-    for i in enumerate(filhos):
-      direcoes[-1].append(filhos[i])
-      funcao[-1].append(abs(filhos[i][0] - fim[0]) + abs(filhos[i][1] - fim[1]) + g)
+    if caminho[-1] == inicio:
+      filhos = nos_filhos(matriz, caminho[-1], caminho[-1], fim)
+    else:
+      filhos = nos_filhos(matriz, caminho[-1], caminho[-2], fim)
+    
+    if filhos == None:
+      for i in range(0, retroceder + 1):
+        del caminho[-1]
+        g -= 2
+      retroceder = 0
+    else:
+      funcao.append(list()), direcoes.append(list())
+      g += 2
+      for i in range(0, len(filhos)):
+        direcoes[-1].append(filhos[i])
+        funcao[-1].append(abs(filhos[i][0] - fim[0]) + abs(filhos[i][1] - fim[1]) + g)
 
-    f_min = min(funcao)
-    next = direcoes[-1][funcao.index(f_min)]
+    f_min = min(funcao[-1])
+    next = direcoes[-1][funcao[-1].index(f_min)]
     funcao[-1].remove(f_min)
     direcoes[-1].remove(next)
-    
+    if funcao[-1] == []:
+      retroceder += 1
+      del funcao[-1]
+      del direcoes[-1]
+    filhos = None
     caminho.append(next)
 
-def nos_filhos(matriz, posicao, fim):
-  direcoes= [(posicao[0], posicao[1] + 1), (posicao[0] - 1, posicao[1]), (posicao[0], posicao[1] - 1), (posicao[0] + 1, posicao[1])]
+  print(inicio, fim)
+  print(caminho)
+
+def nos_filhos(matriz, posicao, anterior, fim):
+  direcoes = [(posicao[0], posicao[1] + 2), (posicao[0] - 2, posicao[1]), (posicao[0], posicao[1] - 2), (posicao[0] + 2, posicao[1])]
   i = 0
-  for (l, c) in direcao:
-      if lab[l][c] == 1:
-        del(direcoes[i])
-      i += 1
+
+  if posicao[0] == anterior[0] and posicao[1] == anterior[1] - 2 or matriz[posicao[0]][posicao[1] + 1] == 1:
+    del(direcoes[i]) #direita
+  else:
+    i += 1
+  if posicao[0] == anterior[0] + 2 and posicao[1] == anterior[1] or matriz[posicao[0] - 1][posicao[1]] == 1:
+    del(direcoes[i]) #pra cima
+  else:
+    i += 1
+  if posicao[0] == anterior[0] and posicao[1] == anterior[1] + 2 or matriz[posicao[0]][posicao[1] - 1] == 1:
+    del(direcoes[i])  #esquerda
+  else:
+    i += 1
+  if posicao[0] == anterior[0] - 2 and posicao[1] == anterior[1] or matriz[posicao[0] + 1][posicao[1]] == 1:
+    del(direcoes[i]) #baixo
+  else:
+    i += 1
+  
+  if i == 0:
+    return None
   return direcoes
 
-
-alt = int(input('Indique a altura do labirinto: '))
-larg = int(input('Indique a largura do labirinto: '))
+alt = 6 #int(input('Indique a altura do labirinto: '))
+larg = 6 #int(input('Indique a largura do labirinto: '))
+inicio = (randrange(alt), randrange(larg))
+fim = (randrange(alt), randrange(larg))
+while inicio == fim:
+  inicio = (randrange(alt), randrange(larg))
+  fim = (randrange(alt), randrange(larg))
 
 lab = cria_labirinto(alt, larg)
-a_estrela(desenha_labirinto(lab), (randrange(alt), randrange(larg)), (randrange(alt), randrange(larg))
-
-'''
-def a_estrela(lab, ini, obj):
-
-#retornar nós visitados e suas f's
-#retornar o próprio caminho
-
-
-
-
-
-
-Segunda função: parametros G da posição (acima) e as posições filhas
-a função irá calcular a f (soma da g e h) das filhas, isso me ajudará a decidir qual o caminho de menor custo. 
-A G das filhas é a G da posição + 2.
-
-
-A heuristica e o custo são sempre recalculados. A minha função tem que calcular o caminho ideal 
- 
-
-
-def funcao_filhos(g, filhos):
-
-
-
-#def aEstrela(lab, inicio, fim):
-  #retornar nós visitados e suas f's 
-  #retornar o proprio caminho, n sei como mas queria ir printando o percurso que ele faz, mas quero atualizar o mapa toda vez que ele faz isso
-# Já sei pq eu sou demais end='\r'
-
-#1º calcula a distancia ideal do ponto I ate o ponto F
-  #(|x1 - x2| + |y1 - y2|) - essa é a distancia ideal
-  
-#2º escolher a proxima posição baseado no valor da distancia de cada possivel ponto
-
-# print('\U0001F47E') -- para printar o ponto se movendo
-
-'''
+#desenha_labirinto(lab, alt, larg)
+a_estrela(desenha_labirinto(lab, alt, larg), inicio, fim)
