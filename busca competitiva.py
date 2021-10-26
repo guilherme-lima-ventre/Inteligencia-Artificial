@@ -103,9 +103,9 @@ def jogar_ia_vs_ia():
   desenhar(jogo)
   #quem ganhou
   switch = {
-    'x': "Jogador X ganhou!",
-    'o': "Jogador O ganhou!",
-    '-': "O jogo empatou!"
+    'x': "Jogador X ganhou!\n",
+    'o': "Jogador O ganhou!\n",
+    '-': "O jogo empatou!\n"
   }
   print(switch.get(res))
   
@@ -138,9 +138,9 @@ def jogar_ia_vs_humano():
       turno += 1
       res = acabou(jogo)
     switch = {
-      'x': "Voce ganhou!",
-      'o': "A IA ganhou!",
-      '-': "O jogo empatou!"
+      'x': "Voce ganhou!\n",
+      'o': "A IA ganhou!\n",
+      '-': "O jogo empatou!\n"
     } 
   else:
     while res == ' ':
@@ -160,13 +160,14 @@ def jogar_ia_vs_humano():
       turno += 1
       res = acabou(jogo)
     switch = {
-      'x': "A IA ganhou!",
-      'o': "Voce ganhou!",
-      '-': "O jogo empatou!"
+      'x': "A IA ganhou!\n",
+      'o': "Voce ganhou!\n",
+      '-': "O jogo empatou!\n"
     }
   desenhar(jogo)
   print(switch.get(res))
 
 
 jogar_ia_vs_ia()
+jogar_ia_vs_humano()
 
