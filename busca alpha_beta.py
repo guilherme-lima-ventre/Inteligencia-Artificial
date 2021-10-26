@@ -9,11 +9,6 @@ def desenhar(estado):
     print()
   print()
 
-#retorna:
-#'x' se x ganhou
-#'o' se o ganhou
-#'-' se empatou
-#' ' se não acabou
 def acabou(estado):
   #checando vitorias horizontais e verticais
   for i in range(3):
@@ -22,12 +17,10 @@ def acabou(estado):
     if estado[i] == ['o'] * 3:
       return 'o'
     if estado[0][i] != ' ' and estado[0][i] == estado[1][i] and estado[1][i] == estado[2][i]:
-      return estado[0][i]
-    
+      return estado[0][i]    
   #checando a diagonal principal
   if estado[0][0] != ' ' and estado[0][0] == estado[1][1] and estado[1][1] == estado[2][2]:
     return estado[0][0]
-
   #checando a diagonal invertida
   if estado[0][2] != ' ' and estado[0][2] == estado[1][1] and estado[1][1] == estado[2][0]:
     return estado[0][2]
@@ -36,54 +29,6 @@ def acabou(estado):
     return ' '
 
   return '-'
-
-def heuristica(estado):
-   vitorias_x = 0
-   vitorias_o = 0
-
-   for i in range(3):
-      if 'o' not in estado[i]:
-         vitorias_x += 1
-         vitorias_x += estado[i].count('x')
-      if 'x' not in estado[i]:
-         vitorias_o += 1
-         vitorias_o += estado[i].count('o')
-      if 'o' not in [estado[0][i], estado[1][i], estado[2][i]]:
-         vitorias_x += 1
-         for k in range(3):
-           if estado[k][i] == 'x':
-             vitorias_x += 1
-      if 'x' not in [estado[0][i], estado[1][i], estado[2][i]]:
-         vitorias_o += 1
-         for k in range(3):
-           if estado[k][i] == 'o':
-             vitorias_o += 1
-         
-   #checando a diagonal principal
-   if estado[0][0] != 'o' and estado[1][1] != 'o' and estado[2][2] != 'o':
-      vitorias_x += 1
-      for k in range(3):
-        if estado[k][k] == 'x':
-          vitorias_x += 1
-   if estado[0][0] != 'x' and estado[1][1] != 'x' and estado[2][2] != 'x':
-      vitorias_o += 1
-      for k in range(3):
-        if estado[k][k] == 'o':
-          vitorias_o += 1
-
-   if estado[0][2] != 'o' and estado[1][1] != 'o' and estado[2][0] != 'o':
-      vitorias_x += 1
-      for k in range(3):
-        if estado[k][2 - k] == 'x':
-          vitorias_x += 1
-   if estado[0][2] != 'x' and estado[1][1] != 'x' and estado[2][0] != 'x':
-      vitorias_o += 1
-      for k in range(3):
-        if estado[k][2 - k] == 'o':
-          vitorias_o += 1
-
-   return vitorias_x - vitorias_o
-
 
 def jogar_ia_vs_ia():
   jogo = iniciar()
@@ -104,9 +49,9 @@ def jogar_ia_vs_ia():
   desenhar(jogo)
   #quem ganhou
   switch = {
-    'x': "Jogador X ganhou!",
-    'o': "Jogador O ganhou!",
-    '-': "O jogo empatou!"
+    'x': "Jogador X ganhou!\n",
+    'o': "Jogador O ganhou!\n",
+    '-': "O jogo empatou!\n"
   }
   print(switch.get(res))
   
@@ -139,9 +84,9 @@ def jogar_ia_vs_humano():
       turno += 1
       res = acabou(jogo)
     switch = {
-      'x': "Voce ganhou!",
-      'o': "A IA ganhou!",
-      '-': "O jogo empatou!"
+      'x': "Voce ganhou!\n",
+      'o': "A IA ganhou!\n",
+      '-': "O jogo empatou!\n"
     } 
   else:
     while res == ' ':
@@ -161,43 +106,65 @@ def jogar_ia_vs_humano():
       turno += 1
       res = acabou(jogo)
     switch = {
-      'x': "A IA ganhou!",
-      'o': "Voce ganhou!",
-      '-': "O jogo empatou!"
+      'x': "A IA ganhou!\n",
+      'o': "Voce ganhou!\n",
+      '-': "O jogo empatou!\n"
     }
   desenhar(jogo)
   print(switch.get(res))
 
-def jog_max_alpha_beta(estado, alfa = -100, beta = 100):
+def jog_max_alpha_beta(estado, alfa = -2, beta = 2):
   final = acabou(estado)
-  if final != ' ':
-    return heuristica(estado)
-    
+  if final == 'x':
+    return (1, (-1, -1))
+  elif final == 'o':
+    return (-1, (-1, -1))
+  elif final == '-':
+    return (0, (-1, -1))
 
+  max_valor = -2
+  melhor_jogada = (-1, -1)
   for i in range(3):
     for k in range(3):
       if estado[i][k] == ' ':
         estado[i][k] = 'x'
-        valor = jog_min_alpha_beta(estado)
-        if valor > 
-                h = heuristica(estado)
-        jogada_h = (i, k)
+        (valor, (x, y)) = jog_min_alpha_beta(estado, alfa, beta)
+        if valor > max_valor:
+          melhor_jogada = (i, k)
+          max_valor = valor
+        alfa = max(alfa, valor)
+        estado[i][k] = ' '
+        if beta <= alfa:
+          break
 
-  return h #pq se não for o ultimo e não me der o valor final eu quero o valor de h pra saber se ele é melhor ou nao que alfa e beta
-  eu quero todos os H finais e vou comparar eles, ai eu gostaria de eliminar tudo abaixo KKKKKKKK pra poder fazer com que a linha acima dos finais 
-  seja agora o final, com os valores das heuristicas do que eram os nos filhos
+  return max_valor, melhor_jogada
    
 
-def jog_min_alpha_beta(estado, alfa = -100, beta = 100):
+def jog_min_alpha_beta(estado, alfa = -2, beta = 2):
   final = acabou(estado)
-  if final != ' ':
-    return heuristica(estado)
+  if final == 'x':
+    return (1, (-1, -1))
+  elif final == 'o':
+    return (-1, (-1, -1))
+  elif final == '-':
+    return (0, (-1, -1))
 
+  min_valor = 2
+  melhor_jogada = (-1, -1)
   for i in range(3):
     for k in range(3):
       if estado[i][k] == ' ':
         estado[i][k] = 'o'
-        jog_max_alpha_beta(estado)
+        (valor, (x, y)) = jog_max_alpha_beta(estado, alfa, beta)
+        if valor < min_valor:
+          melhor_jogada = (i, k)
+          min_valor = valor
+        beta = min(beta, valor)
+        estado[i][k] = ' '
+        if beta <= alfa:
+          break
+
+  return min_valor, melhor_jogada
 
 jogar_ia_vs_ia()
 jogar_ia_vs_humano()
