@@ -10,4 +10,4 @@ a busca aestrela para sair do ponto inicial e chegar ao local marcado como desti
 
 #### Simulated Annealing (Recozimento simulado):
 
-#### PSO:
+#### PSO (Particle swarm optimization):
