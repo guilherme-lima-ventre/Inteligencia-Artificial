@@ -7,3 +7,11 @@ Nesse arquivo que contém o desenvolvimento de um labirinto aleatório que possu
 a busca aestrela para sair do ponto inicial e chegar ao local marcado como destino.
 
 #### Busca Competitiva:
+
+#### Simulated Annealing (Recozimento simulado):
+
+#### PSO (Particle swarm optimization):
+
+#### Naive Bayes Wrapper:
+
+
